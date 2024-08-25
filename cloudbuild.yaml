@@ -21,17 +21,6 @@ steps:
   args: ['push', 'us-central1-docker.pkg.dev/my-project-1470244463968/gke-repo/flask-image' ]
   id: 'Push Docker Image2'
 
-
-- name: 'google/cloud-sdk:latest'
-  entrypoint: 'sh'
-  args:
-  - -xe
-  - -c
-  - |
-    gcloud deploy apply --file deploy/pipeline.yaml --region=us-central1
-    gcloud deploy apply --file deploy/dev.yaml --region=us-central1
-    gcloud deploy apply --file deploy/prod.yaml --region=us-central1
-
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['container', 'clusters', 'create', 'cluster-1', '--zone', 'us-central1-c', '--num-nodes', '1', '--enable-autoscaling', '--min-nodes', '0', '--max-nodes', '3', '--project', 'my-project-1470244463968']
 
@@ -44,7 +33,15 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['container', 'clusters', 'get-credentials', 'cluster-2', '--zone', 'us-central1-c', '--project', 'my-project-1470244463968']
 
-
+- name: 'google/cloud-sdk:latest'
+  entrypoint: 'sh'
+  args:
+  - -xe
+  - -c
+  - |
+    gcloud deploy apply --file deploy/pipeline.yaml --region=us-central1
+    gcloud deploy apply --file deploy/dev.yaml --region=us-central1
+    gcloud deploy apply --file deploy/prod.yaml --region=us-central1
     gcloud deploy releases create 'app-release-${SHORT_SHA}' --delivery-pipeline=gke-cicd-pipeline --region=us-central1 --from-k8s-manifest=./kubernetes/app1.yaml
     gcloud deploy releases create 'app-release-${SHORT_SHA}' --delivery-pipeline=gke-cicd-pipeline --region=us-central1 --from-k8s-manifest=./kubernetes/app2.yaml
     gcloud deploy releases create 'app-release-${SHORT_SHA}' --delivery-pipeline=gke-cicd-pipeline --region=us-central1 --skaffold-file=skaffold.yaml
