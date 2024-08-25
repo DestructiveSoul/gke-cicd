@@ -9,6 +9,7 @@ serialPipeline:
   stages:
   - targetId: dev
   - targetId: prod
+    #This is a test comment
     # profiles:
     # - dev
   # - targetId: staging
