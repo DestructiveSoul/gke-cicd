@@ -18,10 +18,10 @@ steps:
   # - 'us-central1-docker.pkg.dev/<your_project_id>/gke-repo/quickstart-image'
 
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'networks', 'create', 'sp-gke-vpc-dev', '--subnet-mode=custom','--range=10.0.0.0/24']
+  args: ['compute', 'networks', 'create', 'sp-gke-vpc-dev', '--subnet-mode=custom']
 
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'networks', 'create', 'sp-gke-vpc-prd', '--subnet-mode=custom','--range=10.10.0.0/24']
+  args: ['compute', 'networks', 'create', 'sp-gke-vpc-prd', '--subnet-mode=custom']
 
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['compute', 'networks', 'subnets', 'create', 'sp-gke-dsub', '--network=sp-gke-vpc-dev', '--region=us-central1', '--range=10.0.0.0/26']
