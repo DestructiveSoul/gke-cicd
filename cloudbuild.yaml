@@ -17,30 +17,18 @@ steps:
   # images:
   # - 'us-central1-docker.pkg.dev/<your_project_id>/gke-repo/quickstart-image'
 
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'networks', 'create', 'sp-gke-vpc-dev', '--subnet-mode=custom']
-
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'networks', 'create', 'sp-gke-vpc-prd', '--subnet-mode=custom']
-
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'networks', 'subnets', 'create', 'sp-gke-dsub', '--network=sp-gke-vpc-dev', '--region=us-central1', '--range=10.0.0.0/26']
-
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['compute', 'networks', 'subnets', 'create', 'sp-gke-psub', '--network=sp-gke-vpc-prd', '--region=us-central1', '--range=10.10.0.64/26']
-
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/my-project-1470244463968/gke-repo/flask-image' ]
   id: 'Push Docker Image2'
 
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['container', 'clusters', 'create', 'cluster-1', '--zone', 'us-central1-c', '--num-nodes', '1', '--enable-autoscaling', '--min-nodes', '0', '--max-nodes', '3', '--project', 'my-project-1470244463968', '--network', 'sp-gke-vpc-dev','--subnetwork', 'sp-gke-dsub']
+  args: ['container', 'clusters', 'create', 'cluster-1', '--zone', 'us-central1-c', '--num-nodes', '1', '--enable-autoscaling', '--min-nodes', '0', '--max-nodes', '3', '--project', 'my-project-1470244463968']
 
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['container', 'clusters', 'get-credentials', 'cluster-1', '--zone', 'us-central1-c', '--project', 'my-project-1470244463968']
 
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['container', 'clusters', 'create', 'cluster-2', '--zone', 'us-central1-c', '--num-nodes', '1', '--enable-autoscaling', '--min-nodes', '0', '--max-nodes', '3', '--project', 'my-project-1470244463968',  '--network', 'sp-gke-vpc-prd','--subnetwork', 'sp-gke-psub']
+  args: ['container', 'clusters', 'create', 'cluster-2', '--zone', 'us-central1-c', '--num-nodes', '1', '--enable-autoscaling', '--min-nodes', '0', '--max-nodes', '3', '--project', 'my-project-1470244463968']
 
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['container', 'clusters', 'get-credentials', 'cluster-2', '--zone', 'us-central1-c', '--project', 'my-project-1470244463968']
